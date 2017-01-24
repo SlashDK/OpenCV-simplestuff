@@ -46,7 +46,7 @@ def run():
         faceNum = 0
         for (x, y, w, h) in faces:
 
-            cv2.rectangle(frame, (x, y), (x + w, y ss+ h), (0, 255, 0), 2)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             allFaces(frame, x, y, w, h,faceNum)
             faceNum += 1
         # largestFace(faces,frame,video_capture.get(4),video_capture.get(3))
