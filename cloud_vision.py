@@ -1,3 +1,5 @@
+# modified from https://github.com/goberoi/cloudy_vision
+
 import cv2
 from jinja2 import FileSystemLoader, Environment
 import json
@@ -177,11 +179,12 @@ def run():
         cv2.imwrite('input_images/testimage%s.jpg' %(str(index)), frame)
         index+=1
         if(index<4):
-            time.sleep(1)
+            time.sleep(3)
             continue
         break
-        if (cv2.waitKey(1) & 0xFF) == ord('q'):
-            break
+        # cv2.waitKey broken systemwide locally
+        # if (cv2.waitKey(1) & 0xFF) == ord('q'):
+        #     break
 
     # When everything done, release the capture
     video_capture.release()
