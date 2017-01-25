@@ -108,30 +108,30 @@ def process_all_images():
             output_image_filepath = os.path.join(settings('output_dir'), filename)
 
             # Check if the call is already cached.
-            if os.path.isfile(output_json_path):
+            # if os.path.isfile(output_json_path):
 
-                # If so, read the result from the .json file stored in the output dir.
-                log_status(filepath, vendor_name, "skipping API call, already cached")
-                with open(output_json_path, 'r') as infile:
-                    raw_api_result = infile.read()
+            #     # If so, read the result from the .json file stored in the output dir.
+            #     log_status(filepath, vendor_name, "skipping API call, already cached")
+            #     with open(output_json_path, 'r') as infile:
+            #         raw_api_result = infile.read()
 
-            else:
+            # else:
 
-                # If not, make the API call for this particular vendor.
-                log_status(filepath, vendor_name, "calling API")
-                raw_api_result = vendor_module.call_vision_api(filepath, settings('api_keys'))
+            # If not, make the API call for this particular vendor.
+            log_status(filepath, vendor_name, "calling API")
+            raw_api_result = vendor_module.call_vision_api(filepath, settings('api_keys'))
 
-                # And cache the result in a .json file
-                log_status(filepath, vendor_name, "success, storing result in %s" % output_json_path)
-                with open(output_json_path, 'w') as outfile:
-                    outfile.write(raw_api_result)
+            # And cache the result in a .json file
+            log_status(filepath, vendor_name, "success, storing result in %s" % output_json_path)
+            with open(output_json_path, 'w') as outfile:
+                outfile.write(raw_api_result)
 
-                # Resize the original image and write to an output filename
-                log_status(filepath, vendor_name, "writing output image in %s" % output_image_filepath)
-                resize_and_save(filepath, output_image_filepath)
+            # Resize the original image and write to an output filename
+            log_status(filepath, vendor_name, "writing output image in %s" % output_image_filepath)
+            resize_and_save(filepath, output_image_filepath)
 
-                # Sleep so we avoid hitting throttling limits
-                time.sleep(1)
+            # Sleep so we avoid hitting throttling limits
+            time.sleep(1)
 
             # Parse the JSON result we fetched (via API call or from cache)
             api_result = json.loads(raw_api_result)
@@ -176,10 +176,11 @@ def run():
         #     cv2.imwrite('testImage %s.jpg' %(str(index)), crop_img)
         #     index+=1
         #     process_all_images()
-        cv2.imwrite('input_images/testimage%s.jpg' %(str(index)), frame)
+        cv2.imwrite('input_images/testimage.jpg', frame)
+        process_all_images()
         index+=1
         if(index<4):
-            time.sleep(3)
+            time.sleep(10)
             continue
         break
         # cv2.waitKey broken systemwide locally
@@ -189,7 +190,7 @@ def run():
     # When everything done, release the capture
     video_capture.release()
     cv2.destroyAllWindows()
-    process_all_images()
+
 
 if __name__ == "__main__":
     run()
