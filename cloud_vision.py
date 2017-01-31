@@ -4,6 +4,7 @@ import cv2
 from jinja2 import FileSystemLoader, Environment
 import json
 import numpy
+import time
 import os
 import pprint
 import shutil
@@ -32,7 +33,7 @@ def settings(name):
             'output_image_height' : 200,
             'vendors' : {
                 # 'google' : vendors.google,
-                'msft' : vendors.microsoft,
+                # 'msft' : vendors.microsoft,
                 'clarifai' : vendors.clarifai_
                 # 'ibm' : vendors.ibm,
                 # 'cloudsight' : vendors.cloudsight_
@@ -120,7 +121,7 @@ def process_all_images():
             # If not, make the API call for this particular vendor.
             log_status(filepath, vendor_name, "calling API")
             raw_api_result = vendor_module.call_vision_api(filepath, settings('api_keys'))
-
+            # print(raw_api_result)
             # And cache the result in a .json file
             log_status(filepath, vendor_name, "success, storing result in %s" % output_json_path)
             with open(output_json_path, 'w') as outfile:
@@ -161,6 +162,10 @@ def process_all_images():
 def run():
     index=0
     video_capture = cv2.VideoCapture(0)
+
+    video_capture.set(3,640)
+
+    video_capture.set(4,480)
     # faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
     while(True):
         # Capture frame-by-frame
@@ -177,12 +182,14 @@ def run():
         #     index+=1
         #     process_all_images()
         cv2.imwrite('input_images/testimage.jpg', frame)
+        t1=time.time()
         process_all_images()
+        print("time for frame = ",time.time()-t1)
         index+=1
-        if(index<4):
-            time.sleep(10)
-            continue
-        break
+        # if(index<4):
+        #     time.sleep(3)
+        #     continue
+        # break
         # cv2.waitKey broken systemwide locally
         # if (cv2.waitKey(1) & 0xFF) == ord('q'):
         #     break
