@@ -34,9 +34,9 @@ def settings(name):
             'vendors' : {
                 # 'google' : vendors.google,
                 # 'msft' : vendors.microsoft,
-                'clarifai' : vendors.clarifai_
+                # 'clarifai' : vendors.clarifai_
                 # 'ibm' : vendors.ibm,
-                # 'cloudsight' : vendors.cloudsight_
+                'cloudsight' : vendors.cloudsight_
             }
         }
 
@@ -121,7 +121,7 @@ def process_all_images():
             # If not, make the API call for this particular vendor.
             log_status(filepath, vendor_name, "calling API")
             raw_api_result = vendor_module.call_vision_api(filepath, settings('api_keys'))
-            # print(raw_api_result)
+            print(raw_api_result)
             # And cache the result in a .json file
             log_status(filepath, vendor_name, "success, storing result in %s" % output_json_path)
             with open(output_json_path, 'w') as outfile:
